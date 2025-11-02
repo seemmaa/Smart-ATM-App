@@ -1,7 +1,10 @@
 import { Link, Outlet } from 'react-router-dom';
 import '../Styles/Layout.css'; // optional for styling
+import { useAuthStore } from '../Context/authSContext';
 
 function Layout() {
+    const {logout} = useAuthStore();
+  
   return (
     <div className="app-container">
       {/* Navbar */}
@@ -13,6 +16,7 @@ function Layout() {
         <Link to="/watchlist">Watchlist</Link>
         <Link to="/settings">Settings</Link>
         <Link to="/">Login</Link>
+        <button onClick={logout}>logout</button>
       </nav>
 
       {/* Main content area */}

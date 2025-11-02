@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './Pages/Layout';
+import ProtectedRoute from './Component/ProtectedRoute';
 
 const Login = lazy(() => import('./Pages/login'));
 const Dashboard = lazy(() => import('./Pages/dashboard'));
@@ -18,14 +19,16 @@ function App() {
         {/* Login page does not use the main layout */}
         <Route path="/" element={<Login />} />
 
-        {/* All other pages use the Layout */}
-        <Route element={<Layout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/deposit" element={<Deposit />} />
-          <Route path="/withdraw" element={<WithDraw />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/watchlist" element={<WatchList />} />
-          <Route path="/settings" element={<Settings />} />
+        {/* All other pages use the Layout and Protected */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/deposit" element={<Deposit />} />
+            <Route path="/withdraw" element={<WithDraw />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/watchlist" element={<WatchList />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
         </Route>
 
         {/* 404 Not Found */}
