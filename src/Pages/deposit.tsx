@@ -6,6 +6,7 @@ import PopUp from "../Component/PopUp";
 import { BanknoteArrowUp } from "lucide-react";
 import Toast from "../Component/Toast";
 
+
 const BASE_URL = "https://69060c47ee3d0d14c134982d.mockapi.io";
 
 function Deposit() {
@@ -82,7 +83,7 @@ function Deposit() {
       <div className="bg-white w-full max-w-md max-h-full rounded-2xl shadow-lg p-8 border border-gray-200 overflow-auto">
         <h2 className="flex items-center justify-center gap-2 text-2xl font-semibold text-gray-800 mb-6">
           <BanknoteArrowUp className="w-6 h-6 text-gray-800" />
-          <span>Withdraw Money</span>
+          <span>Deposit Money</span>
         </h2>
 
         <div className="relative overflow-hidden bg-gray-100 p-4 rounded-xl mb-6 text-center border border-gray-200">

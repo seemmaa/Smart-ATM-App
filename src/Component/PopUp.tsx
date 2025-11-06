@@ -32,7 +32,7 @@ function PopUp({
                   : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
           >
-            {isLoadingDeposit ? `Depositing ${amount} ILS...` : "OK"}
+            {isLoadingDeposit ? `${processType} ${amount} ILS...` : "OK"}
           </button>
 
           <button
