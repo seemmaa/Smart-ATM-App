@@ -27,7 +27,7 @@ export default function Layout() {
   return (
     <div className="flex min-h-screen bg-gray-200">
       {/* Sidebar */}
-      <aside className="w-60 bg-gray-900 text-white flex flex-col justify-between py-6 px-4 shadow-lg">
+      <aside className="fixed top-0 left-0 h-screen w-60 bg-gray-900 text-white flex flex-col justify-between py-6 px-4 shadow-lg">
         {/* Top nav */}
         <nav className="flex flex-col space-y-3">
           {navItems.map((item) => {
@@ -80,7 +80,7 @@ export default function Layout() {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 ml-60 overflow-y-auto">
         <div
           className="
       w-full min-h-[calc(100vh-48px)]

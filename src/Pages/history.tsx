@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useAuthStore } from "../Context/authSContext";
-import { ArrowLeft, Filter, Download, Search, Calendar, TrendingUp, TrendingDown, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useAuthStore } from '../Context/authSContext';
+import {
+  ArrowLeft,
+  Filter,
+  Download,
+  Search,
+  Calendar,
+  TrendingUp,
+  TrendingDown,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeftRight } from 'lucide-react';
 
 interface Transaction {
@@ -20,8 +30,8 @@ export default function History() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'deposit' | 'withdraw'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  
-  // Pagination 
+
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionsPerPage] = useState(5); // Show 5 transactions per page
 
@@ -31,18 +41,18 @@ export default function History() {
 
   const fetchTransactions = async () => {
     if (!user) return;
-    
+
     try {
       setLoading(true);
       const response = await fetch(
         `https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}/transactions`
       );
-      
+
       if (response.ok) {
         const data = await response.json();
         //  most recent first
         const sortedTransactions = data.sort(
-          (a: Transaction, b: Transaction) => 
+          (a: Transaction, b: Transaction) =>
             new Date(b.date).getTime() - new Date(a.date).getTime()
         );
         setTransactions(sortedTransactions);
@@ -54,33 +64,39 @@ export default function History() {
     }
   };
 
-  // Filter 
-  const filteredTransactions = transactions.filter(transaction => {
+  // Filter
+  const filteredTransactions = transactions.filter((transaction) => {
     const matchesFilter = filter === 'all' || transaction.type.toLowerCase() === filter;
-    const matchesSearch = transaction.amount.toString().includes(searchTerm) ||
-                         transaction.type.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      transaction.amount.toString().includes(searchTerm) ||
+      transaction.type.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && (searchTerm === '' || matchesSearch);
   });
 
-  // Calculate 
+  // Calculate
   const stats = {
-    totalDeposits: transactions.filter(t => t.type === 'Deposit').reduce((sum, t) => sum + t.amount, 0),
-    totalWithdrawals: transactions.filter(t => t.type === 'Withdraw').reduce((sum, t) => sum + t.amount, 0),
-    transactionCount: transactions.length
+    totalDeposits: transactions
+      .filter((t) => t.type === 'Deposit')
+      .reduce((sum, t) => sum + t.amount, 0),
+    totalWithdrawals: transactions
+      .filter((t) => t.type === 'Withdraw')
+      .reduce((sum, t) => sum + t.amount, 0),
+    transactionCount: transactions.length,
   };
 
-  // Pagination 
+  // Pagination
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
-  const currentTransactions = filteredTransactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+  const currentTransactions = filteredTransactions.slice(
+    indexOfFirstTransaction,
+    indexOfLastTransaction
+  );
   const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage);
 
-  
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
-  const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
+  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
- 
   useEffect(() => {
     setCurrentPage(1);
   }, [filter, searchTerm]);
@@ -103,20 +119,17 @@ export default function History() {
               <button
                 onClick={() => navigate(-1)}
                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
-              >
-              </button>
+              ></button>
               <div>
-              
                 <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
-                   <div className="p-3 bg-indigo-100 rounded-md">
-                  <ArrowLeftRight className="w-6 h-6 text-indigo-600" /></div>
+                  <div className="p-3 bg-indigo-100 rounded-md">
+                    <ArrowLeftRight className="w-6 h-6 text-indigo-600" />
+                  </div>
                   Transaction History
                 </h1>
                 <p className="text-gray-600">Complete overview of all your transactions</p>
               </div>
             </div>
-            
-            
           </div>
         </div>
       </div>
@@ -168,16 +181,22 @@ export default function History() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Net Flow</p>
-                <p className={`text-2xl font-bold ${
-                  (stats.totalDeposits - stats.totalWithdrawals) >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}>
+                <p
+                  className={`text-2xl font-bold ${
+                    stats.totalDeposits - stats.totalWithdrawals >= 0
+                      ? 'text-green-600'
+                      : 'text-red-600'
+                  }`}
+                >
                   {(stats.totalDeposits - stats.totalWithdrawals).toLocaleString('en-IL')} ILS
                 </p>
               </div>
-              <div className={`p-3 rounded-full ${
-                (stats.totalDeposits - stats.totalWithdrawals) >= 0 ? 'bg-green-100' : 'bg-red-100'
-              }`}>
-                {(stats.totalDeposits - stats.totalWithdrawals) >= 0 ? (
+              <div
+                className={`p-3 rounded-full ${
+                  stats.totalDeposits - stats.totalWithdrawals >= 0 ? 'bg-green-100' : 'bg-red-100'
+                }`}
+              >
+                {stats.totalDeposits - stats.totalWithdrawals >= 0 ? (
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 ) : (
                   <TrendingDown className="w-6 h-6 text-red-600" />
@@ -205,8 +224,8 @@ export default function History() {
                 onClick={() => setFilter('deposit')}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                   filter === 'deposit'
-                    ? 'bg-green-500 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-green-500! text-white!'
+                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
                 }`}
               >
                 Deposits
@@ -247,12 +266,14 @@ export default function History() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        transaction.type === "Deposit" 
-                          ? "bg-green-100 text-green-600" 
-                          : "bg-red-100 text-red-600"
-                      }`}>
-                        {transaction.type === "Deposit" ? (
+                      <div
+                        className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                          transaction.type === 'Deposit'
+                            ? 'bg-green-100 text-green-600'
+                            : 'bg-red-100 text-red-600'
+                        }`}
+                      >
+                        {transaction.type === 'Deposit' ? (
                           <TrendingUp className="w-6 h-6" />
                         ) : (
                           <TrendingDown className="w-6 h-6" />
@@ -268,26 +289,28 @@ export default function History() {
                             month: 'long',
                             day: 'numeric',
                             hour: '2-digit',
-                            minute: '2-digit'
+                            minute: '2-digit',
                           })}
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="text-right">
-                      <p className={`text-xl font-bold ${
-                        transaction.type === "Deposit" 
-                          ? "text-green-600" 
-                          : "text-red-600"
-                      }`}>
-                        {transaction.type === "Deposit" ? "+" : "-"} 
+                      <p
+                        className={`text-xl font-bold ${
+                          transaction.type === 'Deposit' ? 'text-green-600' : 'text-red-600'
+                        }`}
+                      >
+                        {transaction.type === 'Deposit' ? '+' : '-'}
                         {transaction.amount.toLocaleString('en-IL')} {transaction.currency}
                       </p>
-                      <p className={`text-sm font-medium px-3 py-1 rounded-full ${
-                        transaction.type === "Deposit" 
-                          ? "bg-green-100 text-green-700" 
-                          : "bg-red-100 text-red-700"
-                      }`}>
+                      <p
+                        className={`text-sm font-medium px-3 py-1 rounded-full ${
+                          transaction.type === 'Deposit'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
                         {transaction.type}
                       </p>
                     </div>
@@ -302,10 +325,9 @@ export default function History() {
               </div>
               <h3 className="text-xl font-bold text-gray-600 mb-2">No transactions found</h3>
               <p className="text-gray-500">
-                {transactions.length === 0 
+                {transactions.length === 0
                   ? "You haven't made any transactions yet."
-                  : "No transactions match your current filters."
-                }
+                  : 'No transactions match your current filters.'}
               </p>
             </div>
           )}
@@ -315,9 +337,11 @@ export default function History() {
         {filteredTransactions.length > transactionsPerPage && (
           <div className="flex items-center justify-between bg-white rounded-2xl shadow-lg p-6">
             <div className="text-sm text-gray-600">
-              Showing {indexOfFirstTransaction + 1} to {Math.min(indexOfLastTransaction, filteredTransactions.length)} of {filteredTransactions.length} transactions
+              Showing {indexOfFirstTransaction + 1} to{' '}
+              {Math.min(indexOfLastTransaction, filteredTransactions.length)} of{' '}
+              {filteredTransactions.length} transactions
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <button
                 onClick={prevPage}
@@ -326,7 +350,7 @@ export default function History() {
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              
+
               {/* Page Numbers */}
               <div className="flex space-x-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
@@ -343,7 +367,7 @@ export default function History() {
                   </button>
                 ))}
               </div>
-              
+
               <button
                 onClick={nextPage}
                 disabled={currentPage === totalPages}
