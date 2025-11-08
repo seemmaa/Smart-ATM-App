@@ -1,6 +1,6 @@
 // src/store/authStore.js
 import { create } from 'zustand';
-import type { UserInfo } from '../Types/userInfo';
+import type { UserInfo } from '../Types/types';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface AuthState {

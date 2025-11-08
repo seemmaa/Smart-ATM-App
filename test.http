@@ -1,7 +1,7 @@
 ##################################################
 # Variables
 @BASE_URL = https://69060c47ee3d0d14c134982d.mockapi.io
-@USER_ID = 2
+@USER_ID = 3
 @TRANSACTION_ID = 3
 
 
@@ -55,7 +55,7 @@ Content-Type: application/json
 # Transactions Requests
 
 ### Get all transactions for a user
-GET {{BASE_URL}}/users/2/transactions
+GET {{BASE_URL}}/users/3/transactions
 Content-Type: application/json
 
 ###
