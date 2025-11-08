@@ -36,10 +36,10 @@ export default function Dashboard() {
   // Calculate
   const summary = {
     deposits: transactions
-      .filter((tx) => tx.type === 'deposit')
+      .filter((tx) => tx.type.toLowerCase() === 'deposit')
       .reduce((sum, tx) => sum + tx.amount, 0),
     withdrawals: transactions
-      .filter((tx) => tx.type === 'withdraw')
+      .filter((tx) => tx.type.toLowerCase() === 'withdraw')
       .reduce((sum, tx) => sum + tx.amount, 0),
     balance: balance,
   };

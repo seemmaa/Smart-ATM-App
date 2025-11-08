@@ -46,7 +46,7 @@ export default function History() {
 
       if (response.ok) {
         const data = await response.json();
-        //  most recent first
+        // most recent first
         const sortedTransactions = data.sort(
           (a: Transaction, b: Transaction) =>
             new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -72,10 +72,10 @@ export default function History() {
   // Calculate
   const stats = {
     totalDeposits: transactions
-      .filter((t) => t.type === 'deposit')
+      .filter((t) => t.type.toLowerCase() === 'deposit')
       .reduce((sum, t) => sum + t.amount, 0),
     totalWithdrawals: transactions
-      .filter((t) => t.type === 'withdraw')
+      .filter((t) => t.type.toLowerCase() === 'withdraw')
       .reduce((sum, t) => sum + t.amount, 0),
     transactionCount: transactions.length,
   };
@@ -106,7 +106,7 @@ export default function History() {
   }
 
   return (
-   <>
+    <>
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm rounded-md">
         <div className="container mx-auto px-4 py-6">
@@ -206,8 +206,8 @@ export default function History() {
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                   filter === 'all'
-                    ? 'bg-indigo-500! text-white!'
-                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
+                    ? 'bg-indigo-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 All Transactions
@@ -216,8 +216,8 @@ export default function History() {
                 onClick={() => setFilter('deposit')}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                   filter === 'deposit'
-                    ? 'bg-green-500! text-white!'
-                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 Deposits
@@ -226,8 +226,8 @@ export default function History() {
                 onClick={() => setFilter('withdraw')}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                   filter === 'withdraw'
-                    ? 'bg-red-500! text-white!'
-                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
+                    ? 'bg-red-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 Withdrawals
@@ -260,12 +260,12 @@ export default function History() {
                     <div className="flex items-center space-x-4">
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                          transaction.type === 'Deposit'
+                          transaction.type.toLowerCase() === 'deposit'
                             ? 'bg-green-100 text-green-600'
                             : 'bg-red-100 text-red-600'
                         }`}
                       >
-                        {transaction.type === 'Deposit' ? (
+                        {transaction.type.toLowerCase() === 'deposit' ? (
                           <TrendingUp className="w-6 h-6" />
                         ) : (
                           <TrendingDown className="w-6 h-6" />
@@ -290,15 +290,15 @@ export default function History() {
                     <div className="text-right">
                       <p
                         className={`text-xl font-bold ${
-                          transaction.type === 'Deposit' ? 'text-green-600' : 'text-red-600'
+                          transaction.type.toLowerCase() === 'deposit' ? 'text-green-600' : 'text-red-600'
                         }`}
                       >
-                        {transaction.type === 'Deposit' ? '+' : '-'}
+                        {transaction.type.toLowerCase() === 'deposit' ? '+' : '-'}
                         {transaction.amount.toLocaleString('en-IL')} {transaction.currency}
                       </p>
                       <p
                         className={`text-sm font-medium px-3 py-1 rounded-full ${
-                          transaction.type === 'Deposit'
+                          transaction.type.toLowerCase() === 'deposit'
                             ? 'bg-green-100 text-green-700'
                             : 'bg-red-100 text-red-700'
                         }`}

@@ -88,11 +88,11 @@ export default function Header({
                     >
                       <div className="flex items-center space-x-4">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          transaction.type === "Deposit" 
+                          transaction.type.toLocaleLowerCase() === "deposit" 
                             ? "bg-green-100 text-green-600" 
                             : "bg-red-100 text-red-600"
                         }`}>
-                          {transaction.type === "Deposit" ? (
+                          {transaction.type.toLowerCase() === "deposit" ? (
                             <span className="font-bold">+</span>
                           ) : (
                             <span className="font-bold">-</span>
@@ -115,15 +115,15 @@ export default function Header({
                       
                       <div className="text-right">
                         <p className={`font-bold text-lg ${
-                          transaction.type === "Deposit" 
+                          transaction.type.toLowerCase() === "deposit" 
                             ? "text-green-600" 
                             : "text-red-600"
                         }`}>
-                          {transaction.type === "Deposit" ? "+" : "-"} 
+                          {transaction.type.toLowerCase() === "deposit" ? "+" : "-"} 
                           {transaction.amount.toLocaleString('en-IL')} {transaction.currency}
                         </p>
                         <p className={`text-xs font-medium px-2 py-1 rounded-full ${
-                          transaction.type === "Deposit" 
+                          transaction.type.toLowerCase() === "deposit" 
                             ? "bg-green-100 text-green-700" 
                             : "bg-red-100 text-red-700"
                         }`}>
